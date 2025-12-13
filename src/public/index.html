@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday list</title>
+    <style>
+        :root {
+            --primary-color: #ff6b6b;
+            --bg-color: #f7f1e3;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 400px;
+        }
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover { opacity: 0.9; }
+        .bday-list {
+            list-style: none;
+            padding: 0;
+        }
+        .bday-item {
+            background: #f8f9fa;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-left: 5px solid var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+        }
+        .bday-date {
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="app-title">Ładowanie...</h1>
+
+        <form id="bday-form">
+            <input type="text" id="nameInput" placeholder="Name" required>
+            <input type="date" id="dateInput" required>
+            <button type="submit">Add birthday</button>
+        </form>
+
+        <ul class="bday-list" id="bday-list">
+            </ul>
+    </div>
+
+    <script>
+        async function loadConfig() {
+            const response = await fetch('/api/config');
+            const data = await response.json();
+            document.getElementById('app-title').innerText = data.title;
+        }
+
+        async function loadBirthdays() {
+            const response = await fetch('/api/birthdays');
+            const data = await response.json();
+            const list = document.getElementById('bday-list');
+            list.innerHTML = '';
+            data.forEach(bday => {
+                const li = document.createElement('li');
+                li.className = 'bday-item';
+                li.innerHTML = `<span>${bday.name}</span><span class="bday-date">${bday.date}</span>`;
+                list.appendChild(li);
+            });
+        }
+
+        document.getElementById('bday-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('nameInput').value;
+            const date = document.getElementById('dateInput').value;
+
+            await fetch('/api/birthdays', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, date })
+            });
+
+            document.getElementById('nameInput').value = '';
+            document.getElementById('dateInput').value = '';
+            loadBirthdays();
+        });
+
+        loadConfig();
+        loadBirthdays();
+    </script>
+</body>
+</html>

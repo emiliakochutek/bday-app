@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bday-config
+data:
+  PORT: "8080"
+  APP_TITLE: "Do not forget your friends' birthdays"
