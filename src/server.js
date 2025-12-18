@@ -3,9 +3,9 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
 const APP_TITLE = process.env.APP_TITLE || "Birthday list";
-const MONGO_URL = process.env.MONGO_URL || "mongodb://localhost:27017/urodziny";
+const MONGO_URL = process.env.MONGO_URL;
 
 app.use(bodyParser.json());
 app.use(express.static('src/public'));

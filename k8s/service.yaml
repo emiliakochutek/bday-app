@@ -20,5 +20,5 @@ spec:
   selector:
     app: bday-app
   ports:
-    - port: 80
+    - port: 6767
       targetPort: 8080

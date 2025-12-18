@@ -15,6 +15,7 @@ spec:
       containers:
         - name: bday-container
           image: emiliakochutek/bday-app:v1
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           envFrom:

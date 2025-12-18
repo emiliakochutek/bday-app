@@ -5,6 +5,7 @@ RUN npm install --production
 
 COPY src ./src
 ENV PORT=8080
-ENV APP_TITLE="Birthday list"
+ENV APP_TITLE="Birthday reminder"
+ENV MONGO_URL="mongodb://localhost:27017/birthday"
 EXPOSE 8080
 CMD ["node", "src/server.js"]
